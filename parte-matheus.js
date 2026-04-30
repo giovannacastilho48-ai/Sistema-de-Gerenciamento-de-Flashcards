@@ -1,180 +1,116 @@
 import promptSync from "prompt-sync";
 const prompt = promptSync();
 
-let baralhos = [
-  { id: 1, titulo: "JavaScript" },
-  { id: 2, titulo: "Matemática" }
-];
-
-let flashcards = [
-  { id: 1, pergunta: "O que é uma variável?", resposta: "Um espaço de memória.", idBaralho: 1 },
-  { id: 2, pergunta: "Quanto é 1 + 1?", resposta: "2", idBaralho: 2 }
-];
-
-function adicionarBaralho(titulo) {
-  const novo = {
-    id: baralhos.length ? baralhos[baralhos.length - 1].id + 1 : 1,
-    titulo: titulo
-  };
-  baralhos.push(novo);
-  return novo;
-}
-
-
-function adicionarFlashcard(pergunta, resposta, idBaralho) {
-  const existe = baralhos.some(b => b.id == idBaralho);
-  if (!existe) {
-    console.log("Baralho não existe.");
-    return null;
-  }
-
-  const novo = {
-    id: flashcards.length ? flashcards[flashcards.length - 1].id + 1 : 1,
-    pergunta,
-    resposta,
-    idBaralho
-  };
-
-  flashcards.push(novo);
-  return novo;
-}
-
-function listarBaralhos() {
-  return baralhos;
-}
-
-function listarFlashcards() {
-  return flashcards;
-}
-
-function listarPorBaralho(idBaralho) {
-  return flashcards.filter(f => f.idBaralho == idBaralho);
-}
-
-function atualizarBaralho(id, novoTitulo) {
-  const baralho = baralhos.find(b => b.id == id);
-  if (!baralho) return null;
-
-  baralho.titulo = novoTitulo;
-  return baralho;
-}
-
-function atualizarFlashcard(id, pergunta, resposta) {
-  const flashcard = flashcards.find(f => f.id == id);
-  if (!flashcard) return null;
-
-  flashcard.pergunta = pergunta;
-  flashcard.resposta = resposta;
-  return flashcard;
-}
-
-function removerBaralho(id) {
-  const index = baralhos.findIndex(b => b.id == id);
-  if (index === -1) return false;
-
-  for (let i = flashcards.length - 1; i >= 0; i--) {
-    if (flashcards[i].idBaralho == id) {
-      flashcards.splice(i, 1);
-    }
-  }
-
-  baralhos.splice(index, 1);
-  return true;
-}
-
-function removerFlashcard(id) {
-  const index = flashcards.findIndex(f => f.id == id);
-  if (index === -1) return false;
-
-  flashcards.splice(index, 1);
-  return true;
-}
-
-function buscarPorPergunta(texto) {
-  return flashcards.filter(f =>
-    f.pergunta.toLowerCase().includes(texto.toLowerCase())
-  );
-}
-
-function buscarPorBaralho(idBaralho) {
-  return flashcards.filter(f => f.idBaralho == idBaralho);
-}
+import adicionarBaralho from "./adicionarbaralho.js";
+import adicionarFlashcard from "./adicionarflashcard.js";
+import listarBaralhos from "./listarbaralho.js";
+import listarFlashcards from "./listarflashcard.js";
+import atualizarBaralho from "./atualizarbaralho.js";
+import atualizarFlashcard from "./atualizarflashcard.js";
+import removerBaralho from "./removerbaralho.js";
+import removerFlashcard from "./removerflashcard.js";
+import buscarPorPergunta from "./buscarpergunta.js";
+import buscarPorBaralho from "./buscarbaralho.js";
 
 let opcao;
 
 do {
-  console.log(`
-1 - Adicionar Baralho 
-2 - Listar Baralhos
-3 - Atualizar Baralho
-4 - Remover Baralho
-5 - Adicionar Flashcard
-6 - Listar Flashcards
-7 - Listar Flashcards por Baralho
-8 - Atualizar Flashcard
-9 - Remover Flashcard
-10 - Buscar por Pergunta
-11 - Buscar por Baralho
-0 - Sair
-`);
+  console.log("\n===== MENU FLASHCARDS =====");
+  console.log("1 - Criar Baralho");
+  console.log("2 - Listar Baralhos");
+  console.log("3 - Atualizar Baralho");
+  console.log("4 - Remover Baralho");
+  console.log("5 - Criar Flashcard");
+  console.log("6 - Listar Flashcards");
+  console.log("7 - Atualizar Flashcard");
+  console.log("8 - Remover Flashcard");
+  console.log("9 - Buscar por Pergunta");
+  console.log("10 - Buscar por Baralho");
+  console.log("0 - Sair");
 
   opcao = prompt("Escolha: ");
 
   switch (opcao) {
-    case "1":
-      console.log(adicionarBaralho(prompt("Titulo: ")));
-      break;
 
-    case "2":
+    case "1": {
+      const titulo = prompt("Título do baralho: ");
+      adicionarBaralho(titulo);
+      console.log("Baralho criado!");
+      break;
+    }
+
+    case "2": {
+      console.log("\nBaralhos:");
       console.log(listarBaralhos());
       break;
+    }
 
-    case "3":
-      console.log(atualizarBaralho(
-        prompt("ID: "),
-        prompt("Novo título: ")
-      ));
+    case "3": {
+      const idUpdate = Number(prompt("ID do baralho: "));
+      const novoTitulo = prompt("Novo título: ");
+      atualizarBaralho(idUpdate, novoTitulo);
+      console.log("Baralho atualizado!");
       break;
+    }
 
-    case "4":
-      console.log(removerBaralho(prompt("ID: ")));
+    case "4": {
+      const idDelete = Number(prompt("ID do baralho: "));
+      removerBaralho(idDelete);
+      console.log("Baralho removido!");
       break;
+    }
 
-    case "5":
-      console.log(adicionarFlashcard(
-        prompt("Pergunta: "),
-        prompt("Resposta: "),
-        prompt("ID Baralho: ")
-      ));
+    case "5": {
+      const pergunta = prompt("Pergunta: ");
+      const resposta = prompt("Resposta: ");
+      const idBaralho = Number(prompt("ID do baralho: "));
+      adicionarFlashcard(pergunta, resposta, idBaralho);
+      console.log("Flashcard criado!");
       break;
+    }
 
-    case "6":
+    case "6": {
+      console.log("\nFlashcards:");
       console.log(listarFlashcards());
       break;
+    }
 
-    case "7":
-      console.log(listarPorBaralho(prompt("ID Baralho: ")));
+    case "7": {
+      const idF = Number(prompt("ID do flashcard: "));
+      const novaPergunta = prompt("Nova pergunta: ");
+      const novaResposta = prompt("Nova resposta: ");
+      atualizarFlashcard(idF, novaPergunta, novaResposta);
+      console.log("Flashcard atualizado!");
+      break;
+    }
+
+    case "8": {
+      const idRemover = Number(prompt("ID do flashcard: "));
+      removerFlashcard(idRemover);
+      console.log("Flashcard removido!");
+      break;
+    }
+
+    case "9": {
+      const texto = prompt("Digite parte da pergunta: ");
+      console.log("\nResultado:");
+      console.log(buscarPorPergunta(texto));
+      break;
+    }
+
+    case "10": {
+      const idBusca = Number(prompt("ID do baralho: "));
+      console.log("\nResultado:");
+      console.log(buscarPorBaralho(idBusca));
+      break;
+    }
+
+    case "0":
+      console.log("Saindo...");
       break;
 
-    case "8":
-      console.log(atualizarFlashcard(
-        prompt("ID: "),
-        prompt("Nova pergunta: "),
-        prompt("Nova resposta: ")
-      ));
-      break;
-
-    case "9":
-      console.log(removerFlashcard(prompt("ID: ")));
-      break;
-
-    case "10":
-      console.log(buscarPorPergunta(prompt("Texto: ")));
-      break;
-
-    case "11":
-      console.log(buscarPorBaralho(prompt("ID Baralho: ")));
-      break;
+    default:
+      console.log("Opção inválida!");
   }
 
 } while (opcao !== "0");
