@@ -1,11 +1,20 @@
 import promptSync from "prompt-sync";
 const prompt = promptSync();
 
-// Importando serviços
-import {criarFlashcard, listarFlashcards, atualizarFlashcard, removerFlashcard,buscarPorPergunta} from "./service/flashcardService.js";
-import {criarBaralho, listarBaralhos,atualizarBaralho, removerBaralho } from "./service/baralhoService.js";
 import flashcards  from "./flashcards.js";
 import baralhos from "./baralho.js";
+import adicionarBaralho from "./adicionarbaralho.js";
+import adicionarFlashcard from "./adicionarflashcard.js";
+import listarBaralhos from "./listarbaralho.js";
+import listarFlashcards from "./listarflashcard.js";
+import listarPorBaralho from "./listarporbaralho.js";
+import atualizarBaralho from "./atualizarbaralho.js";
+import atualizarFlashcard from "./atualizarflashcard.js";
+import removerBaralho from "./removerbaralho.js";
+import removerFlashcard from "./removerflashcard.js";
+import buscarPorPergunta from "./buscarpergunta.js";
+import buscarPorBaralho from "./buscarbaralho.js";
+
 let opcao;
 
 do {
@@ -25,7 +34,6 @@ do {
 
   switch (opcao) {
 
-    // ===== BARALHO =====
     case "1":
       const titulo = prompt("Título do baralho: ");
       criarBaralho(titulo);
@@ -49,7 +57,6 @@ do {
       console.log("Baralho removido!");
       break;
 
-    // ===== FLASHCARD =====
     case "5":
       const pergunta = prompt("Pergunta: ");
       const resposta = prompt("Resposta: ");
@@ -73,7 +80,6 @@ do {
       removerFlashcard(idRemover);
       break;
 
-    // ===== BUSCA =====
     case "9":
       const texto = prompt("Digite parte da pergunta: ");
       console.log(buscarPorPergunta(texto));
